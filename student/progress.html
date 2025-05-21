@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學習進度 - 閱讀計劃</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .metric-card {
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 8%;
+            background-color: var(--primary-color);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -20px;
+            width: 8%;
+            text-align: center;
+            font-size: 10px;
+            color: var(--medium-text);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #f2f2f7;
+            margin-right: 6px;
+        }
+        
+        .badge-icon {
+            font-size: 14px;
+        }
+        
+        .streak-badge {
+            background-color: #FFE0B2;
+            color: #E65100;
+        }
+        
+        .time-badge {
+            background-color: #D1C4E9;
+            color: #4527A0;
+        }
+        
+        .complete-badge {
+            background-color: #C8E6C9;
+            color: #2E7D32;
+        }
+        
+        .segment-control {
+            display: flex;
+            background-color: #f2f2f7;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 16px;
+        }
+        
+        .segment-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+        
+        .segment-item.active {
+            background-color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS 狀態欄 -->
+    <div class="ios-status-bar">
+        <div class="time">9:41</div>
+        <div class="status-icons">
+            <i class="fas fa-signal mr-1"></i>
+            <i class="fas fa-wifi mr-1"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 頁面內容 -->
+    <div class="page-content">
+        <!-- 標題 -->
+        <h1 class="text-2xl font-bold mb-6">學習進度</h1>
+        
+        <!-- 進度指標 -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+            <div class="metric-card bg-white">
+                <div class="text-3xl font-bold text-orange-500 mb-1">7</div>
+                <div class="text-xs text-gray-500">學習連續天數</div>
+            </div>
+            <div class="metric-card bg-white">
+                <div class="text-3xl font-bold text-purple-600 mb-1">42</div>
+                <div class="text-xs text-gray-500">本週學習時間</div>
+            </div>
+            <div class="metric-card bg-white">
+                <div class="text-3xl font-bold text-green-600 mb-1">85%</div>
+                <div class="text-xs text-gray-500">計劃完成率</div>
+            </div>
+        </div>
+        
+        <!-- 時間分段控制 -->
+        <div class="segment-control">
+            <div class="segment-item">本週</div>
+            <div class="segment-item active">本月</div>
+            <div class="segment-item">本學期</div>
+        </div>
+        
+        <!-- 學習時間圖表 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-3">學習時間分佈</h2>
+            <div class="chart-container mb-5">
+                <div class="chart-bar" style="left: 7%; height: 30%;"></div>
+                <div class="chart-label" style="left: 7%;">週一</div>
+                
+                <div class="chart-bar" style="left: 17%; height: 60%;"></div>
+                <div class="chart-label" style="left: 17%;">週二</div>
+                
+                <div class="chart-bar" style="left: 27%; height: 45%;"></div>
+                <div class="chart-label" style="left: 27%;">週三</div>
+                
+                <div class="chart-bar" style="left: 37%; height: 70%;"></div>
+                <div class="chart-label" style="left: 37%;">週四</div>
+                
+                <div class="chart-bar" style="left: 47%; height: 80%;"></div>
+                <div class="chart-label" style="left: 47%;">週五</div>
+                
+                <div class="chart-bar" style="left: 57%; height: 90%;"></div>
+                <div class="chart-label" style="left: 57%;">週六</div>
+                
+                <div class="chart-bar" style="left: 67%; height: 50%;"></div>
+                <div class="chart-label" style="left: 67%;">週日</div>
+                
+                <div class="chart-bar" style="left: 77%; height: 65%;"></div>
+                <div class="chart-label" style="left: 77%;">週一</div>
+                
+                <div class="chart-bar" style="left: 87%; height: 75%;"></div>
+                <div class="chart-label" style="left: 87%;">週二</div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>5/1</span>
+                <span>5/15</span>
+            </div>
+        </div>
+        
+        <!-- 學科進度 -->
+        <h2 class="text-lg font-semibold mb-3">學科進度</h2>
+        
+        <div class="card mb-4">
+            <div class="flex justify-between items-start">
+                <div class="flex-1">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
+                            <i class="fas fa-calculator text-blue-500 text-sm"></i>
+                        </div>
+                        <h3 class="font-medium">數學</h3>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>已完成: 85%</span>
+                        <span>17/20 小時</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="flex justify-between items-start">
+                <div class="flex-1">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                            <i class="fas fa-language text-green-500 text-sm"></i>
+                        </div>
+                        <h3 class="font-medium">英文</h3>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>已完成: 65%</span>
+                        <span>13/20 小時</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="flex justify-between items-start">
+                <div class="flex-1">
+                    <div class="flex items-center mb-2">
+                        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-2">
+                            <i class="fas fa-flask text-yellow-500 text-sm"></i>
+                        </div>
+                        <h3 class="font-medium">科學</h3>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" style="width: 40%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>已完成: 40%</span>
+                        <span>8/20 小時</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 學習成就 -->
+        <h2 class="text-lg font-semibold mb-3">學習成就</h2>
+        
+        <div class="card">
+            <div class="flex mb-4">
+                <div class="badge streak-badge mr-3">
+                    <i class="fas fa-fire badge-icon"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-medium mb-1">學習超人</h3>
+                    <p class="text-xs text-gray-500">連續學習滿7天</p>
+                    <div class="progress-bar mt-2" style="height: 4px;">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex mb-4">
+                <div class="badge time-badge mr-3">
+                    <i class="fas fa-clock badge-icon"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-medium mb-1">學習時間達人</h3>
+                    <p class="text-xs text-gray-500">累積學習時間達50小時</p>
+                    <div class="progress-bar mt-2" style="height: 4px;">
+                        <div class="progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex">
+                <div class="badge complete-badge mr-3">
+                    <i class="fas fa-check badge-icon"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-medium mb-1">完成大師</h3>
+                    <p class="text-xs text-gray-500">完成5個學習計劃</p>
+                    <div class="progress-bar mt-2" style="height: 4px;">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部導航欄 -->
+    <div class="tab-bar">
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-home"></i></div>
+            <div>首頁</div>
+        </div>
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-book"></i></div>
+            <div>計劃</div>
+        </div>
+        <div class="tab-item active">
+            <div class="tab-icon"><i class="fas fa-chart-line"></i></div>
+            <div>進度</div>
+        </div>
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-user"></i></div>
+            <div>我的</div>
+        </div>
+    </div>
+</body>
+</html> 

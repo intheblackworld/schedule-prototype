@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人資料 - 閱讀計劃</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e1e1e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 32px;
+            color: #007aff;
+            position: relative;
+        }
+        
+        .edit-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #007aff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .time-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .time-block {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: #f2f2f7;
+            font-size: 14px;
+        }
+        
+        .time-block.selected {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007aff;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e5e5ea;
+            font-size: 15px;
+            background-color: white;
+        }
+        
+        .select-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e5ea;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #007aff;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS 狀態欄 -->
+    <div class="ios-status-bar">
+        <div class="time">9:41</div>
+        <div class="status-icons">
+            <i class="fas fa-signal mr-1"></i>
+            <i class="fas fa-wifi mr-1"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- 頁面內容 -->
+    <div class="page-content">
+        <!-- 個人資料頭部 -->
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+                <div class="edit-avatar">
+                    <i class="fas fa-pen"></i>
+                </div>
+            </div>
+            <h1 class="text-xl font-semibold">王小明</h1>
+            <p class="text-sm text-gray-500">國中二年級</p>
+        </div>
+        
+        <!-- 個人信息 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-4">基本資料</h2>
+            
+            <div class="form-group">
+                <label class="form-label">姓名</label>
+                <input type="text" class="form-input" value="王小明">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">年級</label>
+                <select class="form-input select-input">
+                    <option>國小一年級</option>
+                    <option>國小二年級</option>
+                    <option>國小三年級</option>
+                    <option>國小四年級</option>
+                    <option>國小五年級</option>
+                    <option>國小六年級</option>
+                    <option>國中一年級</option>
+                    <option selected>國中二年級</option>
+                    <option>國中三年級</option>
+                    <option>高中一年級</option>
+                    <option>高中二年級</option>
+                    <option>高中三年級</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">學校</label>
+                <input type="text" class="form-input" value="光明國中">
+            </div>
+            
+            <div class="form-group mb-0">
+                <label class="form-label">班級</label>
+                <input type="text" class="form-input" value="二年三班">
+            </div>
+        </div>
+        
+        <!-- 學習時間設定 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-4">學習時間設定</h2>
+            <p class="text-sm text-gray-500 mb-4">設定你的可用學習時間，幫助系統安排最適合你的學習計劃</p>
+            
+            <div class="mb-4">
+                <h3 class="text-base font-medium mb-2">週一至週五</h3>
+                <div class="time-selector">
+                    <div class="time-block">早上 06:00-07:00</div>
+                    <div class="time-block">早上 07:00-08:00</div>
+                    <div class="time-block selected">下午 17:30-18:30</div>
+                    <div class="time-block selected">晚上 19:00-20:00</div>
+                    <div class="time-block selected">晚上 20:00-21:00</div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="text-base font-medium mb-2">週六</h3>
+                <div class="time-selector">
+                    <div class="time-block">早上 08:00-09:00</div>
+                    <div class="time-block selected">早上 09:00-11:00</div>
+                    <div class="time-block">下午 14:00-16:00</div>
+                    <div class="time-block selected">下午 16:00-18:00</div>
+                    <div class="time-block">晚上 19:00-21:00</div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-base font-medium mb-2">週日</h3>
+                <div class="time-selector">
+                    <div class="time-block">早上 08:00-09:00</div>
+                    <div class="time-block selected">早上 09:00-11:00</div>
+                    <div class="time-block selected">下午 14:00-16:00</div>
+                    <div class="time-block">下午 16:00-18:00</div>
+                    <div class="time-block">晚上 19:00-21:00</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 課外活動與補習 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-4">課外活動與補習</h2>
+            
+            <div class="p-3 border border-gray-200 rounded-lg mb-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium">數學補習班</h3>
+                        <p class="text-xs text-gray-500 mt-1">週二、週四 19:00-21:00</p>
+                    </div>
+                    <button class="text-red-500">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-3 border border-gray-200 rounded-lg mb-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium">鋼琴課</h3>
+                        <p class="text-xs text-gray-500 mt-1">週三 18:00-20:00</p>
+                    </div>
+                    <button class="text-red-500">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button class="flex items-center justify-center w-full py-2 mt-2 text-blue-500 border border-blue-500 rounded-lg">
+                <i class="fas fa-plus mr-2"></i> 添加課外活動
+            </button>
+        </div>
+        
+        <!-- 特殊日期設定 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-4">特殊日期設定</h2>
+            <p class="text-sm text-gray-500 mb-4">添加無法學習的特殊日期，系統將避開這些時間</p>
+            
+            <div class="p-3 border border-gray-200 rounded-lg mb-3">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-medium">家庭旅行</h3>
+                        <p class="text-xs text-gray-500 mt-1">5月20日 - 5月25日</p>
+                    </div>
+                    <button class="text-red-500">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <button class="flex items-center justify-center w-full py-2 mt-2 text-blue-500 border border-blue-500 rounded-lg">
+                <i class="fas fa-plus mr-2"></i> 添加特殊日期
+            </button>
+        </div>
+        
+        <!-- 通知設定 -->
+        <div class="card mb-6">
+            <h2 class="text-lg font-semibold mb-4">通知設定</h2>
+            
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h3 class="font-medium">每日學習提醒</h3>
+                    <p class="text-xs text-gray-500 mt-1">在學習時間開始前15分鐘提醒</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h3 class="font-medium">進度報告</h3>
+                    <p class="text-xs text-gray-500 mt-1">每週日晚上發送本週學習進度摘要</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="font-medium">考試提醒</h3>
+                    <p class="text-xs text-gray-500 mt-1">考試前一週開始每天提醒</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- 底部按鈕 -->
+        <div class="flex space-x-4 mb-8">
+            <button class="btn btn-outline flex-1">取消</button>
+            <button class="btn btn-primary flex-1">保存設定</button>
+        </div>
+    </div>
+    
+    <!-- 底部導航欄 -->
+    <div class="tab-bar">
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-home"></i></div>
+            <div>首頁</div>
+        </div>
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-book"></i></div>
+            <div>計劃</div>
+        </div>
+        <div class="tab-item">
+            <div class="tab-icon"><i class="fas fa-chart-line"></i></div>
+            <div>進度</div>
+        </div>
+        <div class="tab-item active">
+            <div class="tab-icon"><i class="fas fa-user"></i></div>
+            <div>我的</div>
+        </div>
+    </div>
+</body>
+</html> 

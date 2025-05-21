@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行事曆 - 閱讀計劃管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--medium-text);
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007aff;
+            font-weight: 500;
+        }
+        
+        .nav-icon {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+        
+        .header {
+            height: 64px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: space-between;
+            background-color: white;
+        }
+        
+        .calendar-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .calendar-sidebar {
+            width: 280px;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            background-color: white;
+        }
+        
+        .calendar-main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mini-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+        
+        .mini-calendar th {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--medium-text);
+            padding: 8px 0;
+        }
+        
+        .mini-calendar td {
+            text-align: center;
+            padding: 6px 0;
+            font-size: 14px;
+            cursor: pointer;
+            height: 32px;
+            width: 32px;
+            position: relative;
+        }
+        
+        .mini-calendar td:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+        }
+        
+        .mini-calendar .today {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+        }
+        
+        .mini-calendar .selected {
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        .mini-calendar .other-month {
+            color: var(--light-text);
+        }
+        
+        .mini-calendar .has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        .event-category {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+        
+        .event-category:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .event-checkbox {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .event-checkbox.checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            color: white;
+        }
+        
+        .color-exam {
+            background-color: #ff3b30;
+        }
+        
+        .color-activity {
+            background-color: #ff9500;
+        }
+        
+        .color-holiday {
+            background-color: #34c759;
+        }
+        
+        .color-study {
+            background-color: #007aff;
+        }
+        
+        .month-calendar {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        
+        .month-calendar th {
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--medium-text);
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .month-calendar td {
+            vertical-align: top;
+            padding: 10px;
+            height: 120px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .month-calendar .date-number {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .month-calendar .today .date-number {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .month-calendar .other-month {
+            background-color: #f9f9f9;
+        }
+        
+        .month-calendar .other-month .date-number {
+            color: var(--light-text);
+        }
+        
+        .event-item {
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: white;
+        }
+        
+        .event-item.exam {
+            background-color: rgba(255, 59, 48, 0.8);
+        }
+        
+        .event-item.activity {
+            background-color: rgba(255, 149, 0, 0.8);
+        }
+        
+        .event-item.holiday {
+            background-color: rgba(52, 199, 89, 0.8);
+        }
+        
+        .event-item.study {
+            background-color: rgba(0, 122, 255, 0.8);
+        }
+        
+        .month-switcher {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-group {
+            display: flex;
+            margin-left: auto;
+        }
+        
+        .btn-group button {
+            padding: 6px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .btn-group button:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .btn-group button:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .btn-group button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 側邊欄 -->
+        <div class="sidebar">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-blue-600">閱讀計劃管理</h1>
+            </div>
+            
+            <div class="px-4">
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-chart-pie"></i></div>
+                    <span>儀表板</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-users"></i></div>
+                    <span>學生管理</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-book"></i></div>
+                    <span>閱讀計劃</span>
+                </div>
+                <div class="nav-link active">
+                    <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <span>行事曆</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <span>考試管理</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>設定</span>
+                </div>
+            </div>
+            
+            <div class="mt-auto p-4 border-t">
+                <div class="flex items-center p-2">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-user text-blue-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">林老師</h3>
+                        <p class="text-xs text-gray-500">光明國中</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主內容區 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 頂部導航 -->
+            <div class="header">
+                <h2 class="text-lg font-semibold">學校行事曆</h2>
+                
+                <div class="flex items-center">
+                    <button class="btn btn-primary mr-2">
+                        <i class="fas fa-plus mr-2"></i> 新增事件
+                    </button>
+                    
+                    <button class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mx-2">
+                        <i class="fas fa-bell text-gray-500"></i>
+                    </button>
+                    <button class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                        <i class="fas fa-question text-gray-500"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 行事曆內容 -->
+            <div class="calendar-container">
+                <!-- 行事曆側邊欄 -->
+                <div class="calendar-sidebar">
+                    <!-- 迷你月曆 -->
+                    <div class="mini-calendar-wrapper mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-medium">2023年5月</h3>
+                            <div class="flex">
+                                <button class="btn-icon mr-1"><i class="fas fa-chevron-left text-gray-500"></i></button>
+                                <button class="btn-icon"><i class="fas fa-chevron-right text-gray-500"></i></button>
+                            </div>
+                        </div>
+                        
+                        <table class="mini-calendar">
+                            <thead>
+                                <tr>
+                                    <th>日</th>
+                                    <th>一</th>
+                                    <th>二</th>
+                                    <th>三</th>
+                                    <th>四</th>
+                                    <th>五</th>
+                                    <th>六</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="other-month">30</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                    <td>11</td>
+                                    <td>12</td>
+                                    <td>13</td>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td class="today">15</td>
+                                    <td class="has-event">16</td>
+                                    <td class="has-event">17</td>
+                                    <td class="has-event">18</td>
+                                    <td>19</td>
+                                    <td>20</td>
+                                </tr>
+                                <tr>
+                                    <td>21</td>
+                                    <td class="has-event">22</td>
+                                    <td>23</td>
+                                    <td>24</td>
+                                    <td class="has-event">25</td>
+                                    <td>26</td>
+                                    <td>27</td>
+                                </tr>
+                                <tr>
+                                    <td>28</td>
+                                    <td>29</td>
+                                    <td class="has-event">30</td>
+                                    <td class="has-event">31</td>
+                                    <td class="other-month">1</td>
+                                    <td class="other-month">2</td>
+                                    <td class="other-month">3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 事件分類 -->
+                    <div class="mb-6">
+                        <h3 class="font-medium mb-3">事件分類</h3>
+                        
+                        <div class="event-category">
+                            <div class="event-checkbox color-exam checked"></div>
+                            <span>考試</span>
+                        </div>
+                        
+                        <div class="event-category">
+                            <div class="event-checkbox color-activity checked"></div>
+                            <span>學校活動</span>
+                        </div>
+                        
+                        <div class="event-category">
+                            <div class="event-checkbox color-holiday checked"></div>
+                            <span>假日/休息</span>
+                        </div>
+                        
+                        <div class="event-category">
+                            <div class="event-checkbox color-study checked"></div>
+                            <span>閱讀計劃</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 即將到來的事件 -->
+                    <div>
+                        <h3 class="font-medium mb-3">即將到來</h3>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-3">
+                            <div class="px-4 py-3 border-l-4 border-red-500">
+                                <h4 class="font-medium">數學期中考試</h4>
+                                <p class="text-xs text-gray-500">5月18日, 09:00-11:00</p>
+                                <p class="text-xs mt-1">二年級 • 全體學生</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden mb-3">
+                            <div class="px-4 py-3 border-l-4 border-yellow-500">
+                                <h4 class="font-medium">校慶活動</h4>
+                                <p class="text-xs text-gray-500">5月22日, 全天</p>
+                                <p class="text-xs mt-1">全校 • 全體師生</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                            <div class="px-4 py-3 border-l-4 border-blue-500">
+                                <h4 class="font-medium">閱讀計劃截止</h4>
+                                <p class="text-xs text-gray-500">5月25日</p>
+                                <p class="text-xs mt-1">一年級 • 科學競賽準備計劃</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 行事曆主要內容 -->
+                <div class="calendar-main">
+                    <!-- 月份切換器 -->
+                    <div class="month-switcher">
+                        <h2 class="text-xl font-semibold">2023年5月</h2>
+                        <button class="btn-icon ml-2"><i class="fas fa-sync-alt text-gray-500"></i></button>
+                        
+                        <div class="btn-group">
+                            <button class="active">月</button>
+                            <button>週</button>
+                            <button>日</button>
+                            <button>列表</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 月曆 -->
+                    <table class="month-calendar">
+                        <thead>
+                            <tr>
+                                <th>週日</th>
+                                <th>週一</th>
+                                <th>週二</th>
+                                <th>週三</th>
+                                <th>週四</th>
+                                <th>週五</th>
+                                <th>週六</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="other-month">
+                                    <span class="date-number">30</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">1</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">2</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">3</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">4</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">5</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">6</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="date-number">7</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">8</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">9</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">10</span>
+                                    <div class="event-item study">數學: 第三章複習</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">11</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">12</span>
+                                    <div class="event-item study">英文: 閱讀練習</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">13</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="date-number">14</span>
+                                </td>
+                                <td class="today">
+                                    <span class="date-number">15</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">16</span>
+                                    <div class="event-item study">數學: 三角函數複習</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">17</span>
+                                    <div class="event-item study">英文: 文章賞析</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">18</span>
+                                    <div class="event-item exam">數學期中考試</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">19</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">20</span>
+                                    <div class="event-item holiday">家庭旅行 (王小明)</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="date-number">21</span>
+                                    <div class="event-item holiday">家庭旅行 (王小明)</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">22</span>
+                                    <div class="event-item exam">英文月考</div>
+                                    <div class="event-item activity">校慶活動</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">23</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">24</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">25</span>
+                                    <div class="event-item activity">科學競賽</div>
+                                    <div class="event-item study">閱讀計劃截止</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">26</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">27</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="date-number">28</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">29</span>
+                                </td>
+                                <td>
+                                    <span class="date-number">30</span>
+                                    <div class="event-item exam">國文期中考</div>
+                                </td>
+                                <td>
+                                    <span class="date-number">31</span>
+                                    <div class="event-item study">科學實驗報告截止</div>
+                                </td>
+                                <td class="other-month">
+                                    <span class="date-number">1</span>
+                                </td>
+                                <td class="other-month">
+                                    <span class="date-number">2</span>
+                                </td>
+                                <td class="other-month">
+                                    <span class="date-number">3</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

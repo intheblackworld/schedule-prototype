@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>閱讀計劃功能原型</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f7;
+        }
+        .prototype-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .device {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .device-label {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .mobile-frame {
+            width: 390px;
+            height: 844px;
+            background-color: #000;
+            border-radius: 55px;
+            padding: 15px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 40px;
+            overflow: hidden;
+        }
+        .desktop-frame {
+            width: 1024px;
+            height: 768px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">閱讀計劃功能原型</h1>
+        
+        <div class="prototype-container">
+            <!-- 學生版 (手機) -->
+            <div class="device-group">
+                <h2 class="text-2xl font-bold mb-6">學生版 (手機)</h2>
+                <div class="flex flex-wrap justify-center gap-8">
+                    <div class="device">
+                        <div class="device-label">首頁</div>
+                        <div class="mobile-frame">
+                            <div class="mobile-screen">
+                                <iframe src="student/home.html"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device">
+                        <div class="device-label">閱讀計劃詳情</div>
+                        <div class="mobile-frame">
+                            <div class="mobile-screen">
+                                <iframe src="student/plan-detail.html"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device">
+                        <div class="device-label">學習進度</div>
+                        <div class="mobile-frame">
+                            <div class="mobile-screen">
+                                <iframe src="student/progress.html"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device">
+                        <div class="device-label">個人資料與時間設定</div>
+                        <div class="mobile-frame">
+                            <div class="mobile-screen">
+                                <iframe src="student/profile.html"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 教師版 (桌面) -->
+            <div class="device-group mt-12">
+                <h2 class="text-2xl font-bold mb-6">教師版 (桌面)</h2>
+                <div class="device">
+                    <div class="device-label">教師儀表板</div>
+                    <div class="desktop-frame">
+                        <iframe src="teacher/dashboard.html"></iframe>
+                    </div>
+                </div>
+                <div class="device">
+                    <div class="device-label">學生管理</div>
+                    <div class="desktop-frame">
+                        <iframe src="teacher/students.html"></iframe>
+                    </div>
+                </div>
+                <div class="device">
+                    <div class="device-label">閱讀計劃管理</div>
+                    <div class="desktop-frame">
+                        <iframe src="teacher/reading-plans.html"></iframe>
+                    </div>
+                </div>
+                <div class="device">
+                    <div class="device-label">行事曆</div>
+                    <div class="desktop-frame">
+                        <iframe src="teacher/calendar.html"></iframe>
+                    </div>
+                </div>
+                <div class="device">
+                    <div class="device-label">考試管理</div>
+                    <div class="desktop-frame">
+                        <iframe src="teacher/exams.html"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

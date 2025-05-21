@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>閱讀計劃 - 閱讀計劃管理</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--medium-text);
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007aff;
+            font-weight: 500;
+        }
+        
+        .nav-icon {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+        
+        .header {
+            height: 64px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            justify-content: space-between;
+            background-color: white;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f7;
+            border-radius: 8px;
+            padding: 8px 16px;
+            width: 280px;
+        }
+        
+        .search-input {
+            border: none;
+            background: transparent;
+            margin-left: 8px;
+            flex: 1;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #e5e5ea;
+            margin-bottom: 24px;
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--medium-text);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .plan-card {
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-draft {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status-completed {
+            background-color: #f5f5f5;
+            color: #757575;
+        }
+        
+        .subject-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .subject-math {
+            background-color: rgba(0, 122, 255, 0.1);
+            color: #007aff;
+        }
+        
+        .subject-english {
+            background-color: rgba(52, 199, 89, 0.1);
+            color: #34c759;
+        }
+        
+        .subject-science {
+            background-color: rgba(255, 149, 0, 0.1);
+            color: #ff9500;
+        }
+        
+        .subject-chinese {
+            background-color: rgba(255, 45, 85, 0.1);
+            color: #ff2d55;
+        }
+        
+        .template-card {
+            border: 2px dashed #e5e5ea;
+            border-radius: 8px;
+            background-color: white;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .template-card:hover {
+            border-color: #007aff;
+            background-color: rgba(0, 122, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 側邊欄 -->
+        <div class="sidebar">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-blue-600">閱讀計劃管理</h1>
+            </div>
+            
+            <div class="px-4">
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-chart-pie"></i></div>
+                    <span>儀表板</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-users"></i></div>
+                    <span>學生管理</span>
+                </div>
+                <div class="nav-link active">
+                    <div class="nav-icon"><i class="fas fa-book"></i></div>
+                    <span>閱讀計劃</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <span>行事曆</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <span>考試管理</span>
+                </div>
+                <div class="nav-link">
+                    <div class="nav-icon"><i class="fas fa-cog"></i></div>
+                    <span>設定</span>
+                </div>
+            </div>
+            
+            <div class="mt-auto p-4 border-t">
+                <div class="flex items-center p-2">
+                    <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-user text-blue-500"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">林老師</h3>
+                        <p class="text-xs text-gray-500">光明國中</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主內容區 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 頂部導航 -->
+            <div class="header">
+                <h2 class="text-lg font-semibold">閱讀計劃管理</h2>
+                
+                <div class="flex items-center">
+                    <div class="search-bar mr-4">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input type="text" class="search-input" placeholder="搜尋計劃...">
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <button class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-2">
+                            <i class="fas fa-bell text-gray-500"></i>
+                        </button>
+                        <button class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-question text-gray-500"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 主面板內容 -->
+            <div class="main-content">
+                <!-- 頂部動作按鈕 -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="tab-buttons">
+                        <button class="tab-button active">所有計劃</button>
+                        <button class="tab-button">計劃範本</button>
+                        <button class="tab-button">學習資源</button>
+                    </div>
+                    
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i> 創建新計劃
+                    </button>
+                </div>
+                
+                <!-- 過濾選項 -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex space-x-2">
+                        <select class="px-3 py-2 border rounded-lg text-sm">
+                            <option>所有科目</option>
+                            <option>數學</option>
+                            <option>英文</option>
+                            <option>國文</option>
+                            <option>科學</option>
+                        </select>
+                        
+                        <select class="px-3 py-2 border rounded-lg text-sm">
+                            <option>所有班級</option>
+                            <option>一年一班</option>
+                            <option>一年二班</option>
+                            <option>二年一班</option>
+                            <option>二年二班</option>
+                            <option>二年三班</option>
+                        </select>
+                        
+                        <select class="px-3 py-2 border rounded-lg text-sm">
+                            <option>所有狀態</option>
+                            <option>進行中</option>
+                            <option>草稿</option>
+                            <option>已完成</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex">
+                        <button class="px-3 py-2 flex items-center text-sm border rounded-lg mr-2 bg-white">
+                            <i class="fas fa-filter mr-2 text-gray-500"></i> 篩選
+                        </button>
+                        <button class="px-3 py-2 flex items-center text-sm border rounded-lg bg-white">
+                            <i class="fas fa-sort mr-2 text-gray-500"></i> 排序
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 計劃卡片網格 -->
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <!-- 計劃1 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="subject-tag subject-math">數學</span>
+                                <span class="status-tag status-active ml-2">進行中</span>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-1">數學期中考試準備計劃</h3>
+                        <p class="text-sm text-gray-500 mb-3">二年級 • 考試日期: 5月18日</p>
+                        
+                        <div class="mb-4">
+                            <div class="text-xs text-gray-500 mb-1">平均完成率</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>指派人數: 82</span>
+                                <span>75%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="text-gray-500">
+                                <i class="far fa-calendar mr-1"></i> 創建於: 2023/04/15
+                            </div>
+                            <button class="text-blue-500 hover:underline">
+                                查看詳情
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 計劃2 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="subject-tag subject-english">英文</span>
+                                <span class="status-tag status-active ml-2">進行中</span>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-1">英文月考閱讀理解強化</h3>
+                        <p class="text-sm text-gray-500 mb-3">全校 • 考試日期: 5月22日</p>
+                        
+                        <div class="mb-4">
+                            <div class="text-xs text-gray-500 mb-1">平均完成率</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>指派人數: 157</span>
+                                <span>60%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="text-gray-500">
+                                <i class="far fa-calendar mr-1"></i> 創建於: 2023/04/20
+                            </div>
+                            <button class="text-blue-500 hover:underline">
+                                查看詳情
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 計劃3 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="subject-tag subject-science">科學</span>
+                                <span class="status-tag status-draft ml-2">草稿</span>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-1">科學競賽準備計劃</h3>
+                        <p class="text-sm text-gray-500 mb-3">一年級 • 競賽日期: 5月25日</p>
+                        
+                        <div class="mb-4">
+                            <div class="text-xs text-gray-500 mb-1">計劃完成度</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>未指派</span>
+                                <span>草稿</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="text-gray-500">
+                                <i class="far fa-calendar mr-1"></i> 創建於: 2023/05/01
+                            </div>
+                            <button class="text-blue-500 hover:underline">
+                                編輯計劃
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 計劃4 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="subject-tag subject-chinese">國文</span>
+                                <span class="status-tag status-draft ml-2">草稿</span>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-1">國文期中考試準備計劃</h3>
+                        <p class="text-sm text-gray-500 mb-3">三年級 • 考試日期: 5月30日</p>
+                        
+                        <div class="mb-4">
+                            <div class="text-xs text-gray-500 mb-1">計劃完成度</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 50%;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>未指派</span>
+                                <span>草稿</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="text-gray-500">
+                                <i class="far fa-calendar mr-1"></i> 創建於: 2023/05/05
+                            </div>
+                            <button class="text-blue-500 hover:underline">
+                                編輯計劃
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 計劃5 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <div>
+                                <span class="subject-tag subject-math">數學</span>
+                                <span class="status-tag status-completed ml-2">已完成</span>
+                            </div>
+                            <div class="text-gray-400">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold mb-1">數學基礎能力加強</h3>
+                        <p class="text-sm text-gray-500 mb-3">二年級 • 完成日期: 4月30日</p>
+                        
+                        <div class="mb-4">
+                            <div class="text-xs text-gray-500 mb-1">平均完成率</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%;"></div>
+                            </div>
+                            <div class="flex justify-between text-xs mt-1">
+                                <span>指派人數: 82</span>
+                                <span>95%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="text-gray-500">
+                                <i class="far fa-calendar mr-1"></i> 創建於: 2023/03/15
+                            </div>
+                            <button class="text-blue-500 hover:underline">
+                                查看報告
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 創建新計劃卡片 -->
+                    <div class="template-card p-4 flex flex-col items-center justify-center text-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                            <i class="fas fa-plus text-blue-500"></i>
+                        </div>
+                        <h3 class="font-medium mb-1">創建新計劃</h3>
+                        <p class="text-sm text-gray-500">從頭開始或使用範本創建</p>
+                    </div>
+                </div>
+                
+                <!-- 計劃範本標題 -->
+                <h3 class="text-lg font-semibold mb-4">計劃範本</h3>
+                
+                <!-- 計劃範本卡片 -->
+                <div class="grid grid-cols-4 gap-4">
+                    <!-- 範本1 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="subject-tag subject-math">數學</span>
+                            <div class="text-gray-400">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-medium mb-1">期中考試準備範本</h3>
+                        <p class="text-xs text-gray-500 mb-2">包含教學影片、練習題和模擬測驗</p>
+                        <button class="w-full py-1 text-xs text-blue-500 border border-blue-500 rounded mt-2">
+                            使用此範本
+                        </button>
+                    </div>
+                    
+                    <!-- 範本2 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="subject-tag subject-english">英文</span>
+                            <div class="text-gray-400">
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-medium mb-1">閱讀理解強化範本</h3>
+                        <p class="text-xs text-gray-500 mb-2">包含閱讀材料和理解練習</p>
+                        <button class="w-full py-1 text-xs text-blue-500 border border-blue-500 rounded mt-2">
+                            使用此範本
+                        </button>
+                    </div>
+                    
+                    <!-- 範本3 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="subject-tag subject-science">科學</span>
+                            <div class="text-gray-400">
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-medium mb-1">科學實驗範本</h3>
+                        <p class="text-xs text-gray-500 mb-2">包含實驗說明和觀察記錄</p>
+                        <button class="w-full py-1 text-xs text-blue-500 border border-blue-500 rounded mt-2">
+                            使用此範本
+                        </button>
+                    </div>
+                    
+                    <!-- 範本4 -->
+                    <div class="plan-card p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="subject-tag subject-chinese">國文</span>
+                            <div class="text-gray-400">
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                        <h3 class="font-medium mb-1">作文指導範本</h3>
+                        <p class="text-xs text-gray-500 mb-2">包含寫作技巧和範例分析</p>
+                        <button class="w-full py-1 text-xs text-blue-500 border border-blue-500 rounded mt-2">
+                            使用此範本
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

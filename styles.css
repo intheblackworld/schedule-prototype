@@ -1,0 +1,161 @@
+/* 通用樣式 */
+:root {
+    --primary-color: #007aff;
+    --secondary-color: #5ac8fa;
+    --success-color: #34c759;
+    --warning-color: #ff9500;
+    --danger-color: #ff3b30;
+    --light-bg: #f2f2f7;
+    --dark-text: #1c1c1e;
+    --medium-text: #636366;
+    --light-text: #aeaeb2;
+}
+
+/* iOS狀態欄樣式 */
+.ios-status-bar {
+    height: 44px;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 20;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.status-icons {
+    display: flex;
+    align-items: center;
+}
+
+.time {
+    font-weight: 600;
+}
+
+/* 底部導航欄樣式 */
+.tab-bar {
+    height: 83px;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--medium-text);
+    font-size: 10px;
+    padding: 8px 0;
+}
+
+.tab-item.active {
+    color: var(--primary-color);
+}
+
+.tab-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+}
+
+/* 卡片樣式 */
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* 按鈕樣式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-outline {
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* 進度條樣式 */
+.progress-bar {
+    height: 8px;
+    background-color: var(--light-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* 頁面內容區域 */
+.page-content {
+    padding: 16px;
+    padding-bottom: 100px; /* 為底部導航欄留出空間 */
+    height: calc(100% - 44px); /* 減去狀態欄高度 */
+    overflow-y: auto;
+}
+
+/* 教師界面特殊樣式 */
+.sidebar {
+    width: 240px;
+    background-color: #f5f5f7;
+    height: 100%;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+}
+
+.main-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid #e5e5e5;
+    font-weight: 600;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+} 
