@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>行事曆 - 閱讀計劃管理</title>
+    <title>行事曆 - 學習計劃管理</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../styles.css">
@@ -312,6 +312,28 @@
             color: white;
             border-color: var(--primary-color);
         }
+        
+        .school-select {
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            background-color: white;
+            font-size: 14px;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 120px;
+        }
+        
+        .school-select:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .school-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -319,33 +341,33 @@
         <!-- 側邊欄 -->
         <div class="sidebar">
             <div class="p-6">
-                <h1 class="text-xl font-bold text-blue-600">閱讀計劃管理</h1>
+                <h1 class="text-xl font-bold text-blue-600">學習計劃管理</h1>
             </div>
             
             <div class="px-4">
-                <div class="nav-link">
+                <!-- <div class="nav-link">
                     <div class="nav-icon"><i class="fas fa-chart-pie"></i></div>
                     <span>儀表板</span>
-                </div>
+                </div> -->
                 <div class="nav-link">
                     <div class="nav-icon"><i class="fas fa-users"></i></div>
                     <span>學生管理</span>
                 </div>
                 <div class="nav-link">
                     <div class="nav-icon"><i class="fas fa-book"></i></div>
-                    <span>閱讀計劃</span>
+                    <span>學習計劃</span>
                 </div>
                 <div class="nav-link active">
                     <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
                     <span>行事曆</span>
                 </div>
-                <div class="nav-link">
+                <!-- <div class="nav-link">
                     <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
                     <span>考試管理</span>
-                </div>
+                </div> -->
                 <div class="nav-link">
                     <div class="nav-icon"><i class="fas fa-cog"></i></div>
-                    <span>設定</span>
+                    <span>學校管理(管理員)</span>
                 </div>
             </div>
             
@@ -366,7 +388,21 @@
         <div class="flex-1 flex flex-col">
             <!-- 頂部導航 -->
             <div class="header">
-                <h2 class="text-lg font-semibold">學校行事曆</h2>
+                <div class="flex items-center">
+                    <h2 class="text-lg font-semibold mr-6">學校行事曆</h2>
+                    
+                    <!-- 學校選擇下拉框 -->
+                    <div class="flex items-center mr-4">
+                        <label for="school-select" class="text-sm text-gray-600 mr-2">學校：</label>
+                        <select id="school-select" class="school-select">
+                            <option value="guangming">光明國中</option>
+                            <option value="zhongshan">中山國中</option>
+                            <option value="mingde">明德國中</option>
+                            <option value="wenhua">文化國中</option>
+                            <option value="xinshe">新社國中</option>
+                        </select>
+                    </div>
+                </div>
                 
                 <div class="flex items-center">
                     <button class="btn btn-primary mr-2">
@@ -477,10 +513,10 @@
                             <span>假日/休息</span>
                         </div>
                         
-                        <div class="event-category">
+                        <!-- <div class="event-category">
                             <div class="event-checkbox color-study checked"></div>
-                            <span>閱讀計劃</span>
-                        </div>
+                            <span>學習計劃</span>
+                        </div> -->
                     </div>
                     
                     <!-- 即將到來的事件 -->
@@ -503,13 +539,13 @@
                             </div>
                         </div>
                         
-                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <!-- <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
                             <div class="px-4 py-3 border-l-4 border-blue-500">
-                                <h4 class="font-medium">閱讀計劃截止</h4>
+                                <h4 class="font-medium">學習計劃截止</h4>
                                 <p class="text-xs text-gray-500">5月25日</p>
                                 <p class="text-xs mt-1">一年級 • 科學競賽準備計劃</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 
@@ -522,8 +558,8 @@
                         
                         <div class="btn-group">
                             <button class="active">月</button>
-                            <button>週</button>
-                            <button>日</button>
+                            <!-- <button>週</button>
+                            <button>日</button> -->
                             <button>列表</button>
                         </div>
                     </div>
@@ -577,14 +613,12 @@
                                 </td>
                                 <td>
                                     <span class="date-number">10</span>
-                                    <div class="event-item study">數學: 第三章複習</div>
                                 </td>
                                 <td>
                                     <span class="date-number">11</span>
                                 </td>
                                 <td>
                                     <span class="date-number">12</span>
-                                    <div class="event-item study">英文: 閱讀練習</div>
                                 </td>
                                 <td>
                                     <span class="date-number">13</span>
@@ -599,11 +633,9 @@
                                 </td>
                                 <td>
                                     <span class="date-number">16</span>
-                                    <div class="event-item study">數學: 三角函數複習</div>
                                 </td>
                                 <td>
                                     <span class="date-number">17</span>
-                                    <div class="event-item study">英文: 文章賞析</div>
                                 </td>
                                 <td>
                                     <span class="date-number">18</span>
@@ -636,7 +668,6 @@
                                 <td>
                                     <span class="date-number">25</span>
                                     <div class="event-item activity">科學競賽</div>
-                                    <div class="event-item study">閱讀計劃截止</div>
                                 </td>
                                 <td>
                                     <span class="date-number">26</span>
@@ -658,7 +689,6 @@
                                 </td>
                                 <td>
                                     <span class="date-number">31</span>
-                                    <div class="event-item study">科學實驗報告截止</div>
                                 </td>
                                 <td class="other-month">
                                     <span class="date-number">1</span>
